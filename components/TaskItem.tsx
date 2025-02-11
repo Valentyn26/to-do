@@ -11,22 +11,27 @@ import { useUserContext } from "@/contexts/UserContext";
 interface TaskItemProps {
     task: Task;
     listId: string;
+    onDelete: (id: number) => void;
+    onSave: (newTask: Task) => void;
 }
 
-export default function TaskItem({ task, listId }: TaskItemProps) {
+export default function TaskItem({ task, listId, onDelete, onSave }: TaskItemProps) {
     const { user } = useUserContext();
     const { setLists } = useTaskLists();
     const [isEditing, setIsEditing] = useState(false);
     const [taskName, setTaskName] = useState(task.name);
     const [isCompleted, setIsCompleted] = useState(task.completed);
 
-    const handleSave = () => {
-        updateTaskInList(listId, task.id, { ...task, name: taskName, completed: isCompleted });
+    function handleSave() {
+        const newTask = { ...task, name: taskName, completed: isCompleted };
+        onSave(newTask);
+        updateTaskInList(listId, task.id, newTask);
         setIsEditing(false);
         fetchTaskLists(setLists);
     };
 
-    const handleDelete = () => {
+    function handleDelete() {
+        onDelete(task.id);
         deleteTaskFromList(listId, task.id)
         fetchTaskLists(setLists);
     }

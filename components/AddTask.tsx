@@ -9,25 +9,17 @@ import { useUserContext } from "@/contexts/UserContext";
 
 interface AddTaskProps {
     listId: string;
+    onAdd: (taskName: string) => void;
 }
 
-export default function AddTask({ listId }: AddTaskProps) {
+export default function AddTask({ listId, onAdd }: AddTaskProps) {
     const { user } = useUserContext();
-    const { setLists } = useTaskLists();
     const [taskName, setTaskName] = useState("");
 
-    const handleAdd = () => {
-        if (!taskName.trim()) return;
-        const newTask = {
-            id: Date.now(),
-            name: taskName,
-            completed: false
-        };
-
-        addTaskToList(listId, newTask);
+    function handleAdd() {
+        onAdd(taskName);
         setTaskName("");
-        fetchTaskLists(setLists);
-    };
+    }
 
     return (
         <div className="flex gap-2 mt-4">
