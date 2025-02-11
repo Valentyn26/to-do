@@ -4,9 +4,11 @@ import Input from "./UI/Input";
 import { addTaskList, deleteTaskList, fetchTaskLists, updateTaskList } from "@/firebase/task";
 import TaskListItem from "./TaskListItem";
 import { useTaskLists } from "@/contexts/TaskListsContext";
+import { useUserContext } from "@/contexts/UserContext";
 
 
 export default function TaskLists() {
+    const { user } = useUserContext();
     const { lists, setLists } = useTaskLists();
     const [newListName, setNewListName] = useState("");
 
@@ -36,16 +38,17 @@ export default function TaskLists() {
     return (
         <section>
             <h1 className="font-bold text-center">Task Lists</h1>
-            <Input
-                type="text"
-                name="newList"
-                placeholder="Enter list name"
-                value={newListName}
-                onChange={(e) => setNewListName(e.target.value)}
-            >
-                New Task List
-            </Input>
-            <Button onClick={handleAddList}>Add List</Button>
+            <div>New Task List</div>
+            <div className="flex gap-x-3">
+                <Input
+                    type="text"
+                    name="newList"
+                    placeholder="Enter list name"
+                    value={newListName}
+                    onChange={(e) => setNewListName(e.target.value)}
+                />
+                {user?.role === "admin" && <Button onClick={handleAddList}>Add List</Button>}
+            </div>
             <div>
                 {lists.map((list) => (
                     <TaskListItem

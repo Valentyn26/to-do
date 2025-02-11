@@ -5,12 +5,14 @@ import { useState } from "react";
 import Button from "./UI/Button";
 import { useTaskLists } from "@/contexts/TaskListsContext";
 import Input from "./UI/Input";
+import { useUserContext } from "@/contexts/UserContext";
 
 interface AddTaskProps {
     listId: string;
 }
 
 export default function AddTask({ listId }: AddTaskProps) {
+    const { user } = useUserContext();
     const { setLists } = useTaskLists();
     const [taskName, setTaskName] = useState("");
 
@@ -35,11 +37,7 @@ export default function AddTask({ listId }: AddTaskProps) {
                 value={taskName}
                 onChange={(e) => setTaskName(e.target.value)}
             />
-            <Button
-                onClick={handleAdd}
-            >
-                Add
-            </Button>
+            {user?.role === "admin" && <Button onClick={handleAdd}>Add</Button>}
         </div>
     );
 }

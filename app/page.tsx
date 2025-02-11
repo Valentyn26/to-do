@@ -2,22 +2,24 @@
 
 import TaskLists from "@/components/TaskLists";
 import Button from "@/components/UI/Button";
-import { logOut } from "@/firebase/auth";
+import { useUserContext } from "@/contexts/UserContext";
+import { getUserRole, logOut } from "@/firebase/auth";
 import { auth } from "@/firebase/firebaseConfig";
-import { onAuthStateChanged, User } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export default function Home() {
-  const [user, setUser] = useState<User | null>(null);
+  const { user, setUser } = useUserContext();
 
   useEffect(() => {
     const storedToken = localStorage.getItem("authToken");
 
     if (!storedToken) return;
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser: any) => {
       if (currentUser) {
-        setUser(currentUser);
+        const role = await getUserRole(currentUser.uid);
+        setUser({ ...currentUser, role });
       }
     });
 

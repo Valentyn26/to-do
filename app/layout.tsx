@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { TaskListsProvider } from "@/contexts/TaskListsContext";
+import { UserContextProvider } from "@/contexts/UserContext";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,7 +17,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <TaskListsProvider>
-          {children}
+          <UserContextProvider>
+            {children}
+          </UserContextProvider>
         </TaskListsProvider>
       </body>
     </html>

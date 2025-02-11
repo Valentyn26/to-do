@@ -6,6 +6,7 @@ import Input from "./UI/Input";
 import AddTask from "./AddTask";
 import TaskItem from "./TaskItem";
 import Button from "./UI/Button";
+import { useUserContext } from "@/contexts/UserContext";
 
 interface TaskListItemProps {
     list: TaskList;
@@ -14,6 +15,7 @@ interface TaskListItemProps {
 }
 
 export default function TaskListItem({ list, onEditName, onDelete }: TaskListItemProps) {
+    const { user } = useUserContext();
     const [newName, setNewName] = useState(list.name);
     const [isEditing, setIsEditing] = useState(false);
 
@@ -36,12 +38,16 @@ export default function TaskListItem({ list, onEditName, onDelete }: TaskListIte
                     <h2>{list.name}</h2>
                 )}
 
-                {isEditing ? (
-                    <Button onClick={handleEditName} color="green">Save</Button>
-                ) : (
-                    <Button onClick={() => setIsEditing(true)} color="blue">Edit</Button>
+                {user?.role === "admin" && (
+                    isEditing ? (
+                        <Button onClick={handleEditName} color="green">Save</Button>
+                    ) : (
+                        <Button onClick={() => setIsEditing(true)} color="blue">Edit</Button>
+                    )
                 )}
-                <Button onClick={() => onDelete(list.id)} color="red">Delete</Button>
+                {user?.role === "admin" &&
+                    <Button onClick={() => onDelete(list.id)} color="red">Delete</Button>
+                }
             </div>
 
             <AddTask listId={list.id} />

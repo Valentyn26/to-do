@@ -6,6 +6,7 @@ import { Task } from "@/types/task";
 import { useState } from "react";
 import Button from "./UI/Button";
 import Input from "./UI/Input";
+import { useUserContext } from "@/contexts/UserContext";
 
 interface TaskItemProps {
     task: Task;
@@ -13,6 +14,7 @@ interface TaskItemProps {
 }
 
 export default function TaskItem({ task, listId }: TaskItemProps) {
+    const { user } = useUserContext();
     const { setLists } = useTaskLists();
     const [isEditing, setIsEditing] = useState(false);
     const [taskName, setTaskName] = useState(task.name);
@@ -53,14 +55,18 @@ export default function TaskItem({ task, listId }: TaskItemProps) {
             )}
 
             <div className="flex gap-2">
-                {isEditing ? (
-                    <Button onClick={handleSave} color="green">Save</Button>
-                ) : (
-                    <Button onClick={() => setIsEditing(true)} color="blue">Edit</Button>
+
+
+                {user?.role === "admin" && (
+                    isEditing ? (
+                        <Button onClick={handleSave} color="green">Save</Button>
+                    ) : (
+                        <Button onClick={() => setIsEditing(true)} color="blue">Edit</Button>
+                    )
                 )}
-                <button onClick={handleDelete} className="px-3 py-1 bg-red-400 text-white rounded">
-                    Delete
-                </button>
+                {user?.role === "admin" &&
+                    <Button onClick={handleDelete} color="red">Delete</Button>
+                }
             </div>
         </div>
     );

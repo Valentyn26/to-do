@@ -1,3 +1,4 @@
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { auth, db } from "./firebaseConfig";
 import {
     createUserWithEmailAndPassword,
@@ -18,8 +19,28 @@ export const signUp = async (email: string, password: string, username: string) 
             });
         }
 
+        await setDoc(doc(db, "users", user.uid), {
+            email: user.email,
+            username: username,
+            role: "viewer"
+        });
+
         await saveTokenToLocalStorage();
         return user;
+    } catch (error: any) {
+        throw new Error(error.message);
+    }
+};
+
+export const getUserRole = async (uid: string) => {
+    try {
+        const userDoc = await getDoc(doc(db, "users", uid));
+        if (userDoc.exists()) {
+            const data = userDoc.data();
+            return data.role;
+        } else {
+            throw new Error("User not found");
+        }
     } catch (error: any) {
         throw new Error(error.message);
     }
@@ -45,7 +66,13 @@ export const logOut = async () => {
 };
 
 export const subscribeToAuthChanges = (callback: (user: any) => void) => {
-    return onAuthStateChanged(auth, callback);
+    return onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            callback(user);
+        } else {
+            callback(null);
+        }
+    });
 };
 
 const getToken = async () => {
