@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { TaskListsProvider } from "@/contexts/TaskListsContext";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -14,7 +15,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {children}
+        <TaskListsProvider>
+          {children}
+        </TaskListsProvider>
       </body>
     </html>
   );

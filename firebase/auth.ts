@@ -6,7 +6,6 @@ import {
     onAuthStateChanged,
     updateProfile
 } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
 
 export const signUp = async (email: string, password: string, username: string) => {
     try {
@@ -61,14 +60,6 @@ const getToken = async () => {
 export const saveTokenToLocalStorage = async () => {
     const token = await getToken();
     if (token) {
-        localStorage.setItem("authToken", token); // зберігаємо токен у LocalStorage
-    }
-};
-
-export const refreshToken = async () => {
-    const user = auth.currentUser;
-    if (user) {
-        const newToken = await user.getIdToken(true); // true для примусової перевірки і поновлення токену
-        localStorage.setItem("authToken", newToken);
+        localStorage.setItem("authToken", token);
     }
 };

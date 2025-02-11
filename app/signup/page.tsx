@@ -15,8 +15,7 @@ export default function SignUp() {
 
     const handleSignUp = async () => {
         try {
-            const response = await signUp(user.email, user.password, user.name);
-            console.log(response);
+            await signUp(user.email, user.password, user.name);
             router.replace('/');
         } catch (error: any) {
             alert(error.message);
@@ -37,7 +36,7 @@ export default function SignUp() {
                     Password
                 </Input>
                 <button onClick={handleSignUp} type="submit"
-                    className="self-center border border-gray- px-3 py-2 rounded-lg w-[150px] bg-blue-400"
+                    className="self-center border border-gray-400 px-3 py-2 rounded-lg w-[150px] bg-blue-400"
                 >
                     Sign Up
                 </button>

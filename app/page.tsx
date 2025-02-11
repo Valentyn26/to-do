@@ -1,6 +1,7 @@
 "use client";
 
-import TaskLists from "@/components/TaskList";
+import TaskLists from "@/components/TaskLists";
+import Button from "@/components/UI/Button";
 import { logOut } from "@/firebase/auth";
 import { auth } from "@/firebase/firebaseConfig";
 import { onAuthStateChanged, User } from "firebase/auth";
@@ -38,13 +39,10 @@ export default function Home() {
             Login
           </Link>
           :
-          <button type="button" onClick={() => handleLogOut()}
-            className="px-4 py-2 rounded bg-blue-400 text-white"
-          >
-            Logout
-          </button>
+          <Button onClick={() => handleLogOut()}>Logout</Button>
         }
       </header>
+      <TaskLists />
     </main>
   );
 }

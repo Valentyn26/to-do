@@ -14,8 +14,7 @@ export default function SignIn() {
 
     const handleSignIn = async () => {
         try {
-            const response = await signIn(user.email, user.password);
-            console.log(response);
+            await signIn(user.email, user.password);
             router.replace('/');
         } catch (error: any) {
             alert(error.message);
@@ -32,8 +31,8 @@ export default function SignIn() {
                 <Input type="password" name="password" onChange={e => setUser({ ...user, password: e.target.value })} value={user.password}>
                     Password
                 </Input>
-                <button onClick={handleSignIn} type="submit"
-                    className="self-center border border-gray- px-3 py-2 rounded-lg w-[150px] bg-blue-400"
+                <button onClick={handleSignIn}
+                    className="self-center border border-gray-400 px-3 py-2 rounded-lg w-[150px] bg-blue-400"
                 >
                     Login
                 </button>
